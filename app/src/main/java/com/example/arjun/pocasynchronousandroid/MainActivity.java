@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
     ImageView imageView;
+    public static final String url = "https://tineye.com/images/widgets/mona.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
