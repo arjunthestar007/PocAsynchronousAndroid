@@ -15,39 +15,29 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     public static final String url = "https://tineye.com/images/widgets/mona.jpg";
     private static final String TAG = "ExampleThread";
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = findViewById(R.id.imageView);
-        Log.d(TAG, "TAG: "+Thread.currentThread().getName());
+        Log.d(TAG, "TAG: " + Thread.currentThread().getName());
 
         // creating new thread
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d(TAG, "TAG: "+Thread.currentThread().getName());
-                URL newurl = null;
-                try {
-                    newurl = new URL(url);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                Bitmap bitmap = null;
-                try {
-                    bitmap = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Log.d(TAG, "TAG: " + Thread.currentThread().getName());
 
-                final Bitmap finalBitmap = bitmap;
+                gettheImage();
+
                 // access ui thread from background
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d(TAG, "TAG: "+Thread.currentThread().getName());
-                        imageView.setImageBitmap(finalBitmap);
+                        Log.d(TAG, "TAG: " + Thread.currentThread().getName());
+                        imageView.setImageBitmap(bitmap);
 
                     }
                 });
@@ -58,5 +48,21 @@ public class MainActivity extends AppCompatActivity {
         thread.start();
 
 
+    }
+
+
+    public Bitmap gettheImage() {
+        URL newurl = null;
+        try {
+            newurl = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        try {
+            bitmap = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 }
