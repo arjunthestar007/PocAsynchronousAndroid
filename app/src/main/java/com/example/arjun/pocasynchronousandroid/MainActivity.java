@@ -13,7 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
-    ImageView imageView;
+    ImageView imageView,imageView2;
     public static final String url = "https://tineye.com/images/widgets/mona.jpg";
     private static final String TAG = "ExampleThread";
     Bitmap bitmap;
@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = findViewById(R.id.imageView);
+        imageView2=findViewById(R.id.imageView2);
         Log.d(TAG, "TAG: " + Thread.currentThread().getName());
 
         // bound to the main thread
@@ -44,6 +45,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         thread.start();
+
+        Thread thread1=new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                final Bitmap copyBitmap = gettheImage();
+                imageView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView2.setImageBitmap(copyBitmap);
+
+                    }
+                });
+
+            }
+        };
+        thread1.start();
 
     }
 
